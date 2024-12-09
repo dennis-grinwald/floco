@@ -1,0 +1,11 @@
+out/
+*__pycache__*
+*.DS_Store*
+.idea
+venv
+.env
+*.sif
+logs/
+.vscode
+*.ipynb_checkpoints
+data/cifar10
