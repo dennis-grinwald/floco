@@ -19,8 +19,8 @@ class FlocoServer(FedAvgServer):
     @staticmethod
     def get_hyperparams(args_list=None) -> Namespace:
         parser = ArgumentParser()
-        parser.add_argument("--endpoints", type=int, default=1)
-        parser.add_argument("--tau", type=int, default=100)
+        parser.add_argument("--endpoints", type=int, default=10)
+        parser.add_argument("--tau", type=int, default=10)
         parser.add_argument("--rho", type=float, default=0.1)
 
         # Floco+ (only used if pers_epoch > 0)
