@@ -16,9 +16,7 @@ class FlocoClient(FedAvgClient):
 
     def set_parameters(self, package: dict[str, Any]):
         super().set_parameters(package)
-        if package["subregion_parameters"]:
-            self.model.sample_from = package["sample_from"]
-            self.model.subregion_parameters = package["subregion_parameters"]
+        self.model.subregion_parameters = package["subregion_parameters"]
         if self.args.floco.pers_epoch > 0:  # Floco+
             self.global_params = OrderedDict(
                 (key, param.to(self.device))
@@ -36,8 +34,6 @@ class FlocoClient(FedAvgClient):
         return client_package
 
     def fit(self):
-        if self.model.subregion_parameters is None:
-            self.model.sample_from = "simplex_uniform"
         common_params = dict(
             dataset=self.dataset,
             dataloader=self.trainloader,
@@ -49,8 +45,6 @@ class FlocoClient(FedAvgClient):
         # Train global solution simplex
         training_loop(model=self.model, local_epoch=self.local_epoch, **common_params)
         if self.args.floco.pers_epoch > 0:  # Floco+
-            if self.pers_model.subregion_parameters is None:
-                self.pers_model.sample_from = "simplex_uniform"
             # Train personalized solution simplex
             training_loop(
                 model=self.pers_model,
@@ -62,11 +56,7 @@ class FlocoClient(FedAvgClient):
 
     @torch.no_grad()
     def evaluate(self):
-        if self.model.subregion_parameters is None:
-            self.model.sample_from = "simplex_center"
         if self.args.floco.pers_epoch > 0:  # Floco+
-            if self.pers_model.subregion_parameters is None:
-                self.pers_model.sample_from = "simplex_center"
             return super().evaluate(self.pers_model)
         else:
             return super().evaluate()
