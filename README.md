@@ -36,11 +36,10 @@ python generate_data.py -d femnist
 ```
 # Reproducing the results
 ```py
-python main.py [--config-name <CONFIG_NAME>] [method=<METHOD_NAME>] [--seed=<SEED>]
+python main.py [--config-name <CONFIG_NAME>] [method=<METHOD_NAME>]
 ```
 - `--config-name`: Name of `.yaml` config file (w/o the `.yaml` extension) in the `config/` directory.
 - `method`: The algorithm's name, e.g., `method=fedavg` which should be identical to the `.py` file name in `src/server`.. 
-- `--seed`: Name of `.yaml` config file (w/o the `.yaml` extension) in the `config/` directory.
 ### Example:
 ```py
 python main.py --config-name cifar10_dir method=floco
