@@ -16,7 +16,6 @@ from src.utils.tools import Namespace
 
 
 class FlocoServer(FedAvgServer):
-
     @staticmethod
     def get_hyperparams(args_list=None) -> Namespace:
         parser = ArgumentParser()
@@ -99,7 +98,6 @@ class SimplexModel(DecoupledModel):
         base_model = MODELS[self.args.model.name](
             dataset=self.args.dataset.name,
             pretrained=self.args.model.use_torchvision_pretrained_weights,
-            seed=self.args.common.seed,
         )
         self.base = base_model.base
         self.classifier = SimplexLinear(
@@ -113,20 +111,18 @@ class SimplexModel(DecoupledModel):
 
     def forward(self, x):
         endpoints = self.args.floco.endpoints
-        if self.subregion_parameters is None:
-            if self.training:
-                simplex_center = tuple([1 / endpoints for _ in range(endpoints)])
-                self.classifier.alphas = simplex_center
-            else:
-                # sample uniformly from simplex
+        if self.subregion_parameters is None:  # before projection
+            if self.training:  # sample uniformly from simplex for training
                 sample = np.random.exponential(scale=1.0, size=endpoints)
                 self.classifier.alphas = sample / sample.sum()
-        else:
-            if self.training:
-                self.classifier.alphas = self.subregion_parameters[0]
-            else:
-                # sample uniformly from subregion
+            else:  # use simplex center for testing
+                simplex_center = tuple([1 / endpoints for _ in range(endpoints)])
+                self.classifier.alphas = simplex_center
+        else:  # after projection
+            if self.training:  # sample uniformly from subregion for training
                 self.classifier.alphas = _sample_L1_ball(*self.subregion_parameters)
+            else:  # use subregion center for testing
+                self.classifier.alphas = self.subregion_parameters[0]
         return super().forward(x)
 
 
