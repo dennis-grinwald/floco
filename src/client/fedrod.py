@@ -40,10 +40,10 @@ class FedRoDClient(FedAvgClient):
         )
         self.clients_label_counts = []
         for indices in self.data_indices:
-            counter = Counter(np.array(self.train_dataset.targets)[indices["train"]])
+            counter = Counter(np.array(self.dataset.targets)[indices["train"]])
             self.clients_label_counts.append(
                 torch.tensor(
-                    [counter.get(i, 0) for i in range(len(self.train_dataset.classes))],
+                    [counter.get(i, 0) for i in range(len(self.dataset.classes))],
                     device=self.device,
                 )
             )
