@@ -3,8 +3,8 @@
 Official repository for Floco ([Federated Learning over Connected Modes](https://openreview.net/pdf?id=JL2eMCfDW8)), published at NeurIPS'24.  
 
 We offer implementations for two federated learning frameworks:
-- [FL-Bench](https://github.com/KarhouTam/FL-bench): [Pull request under review](https://github.com/KarhouTam/FL-bench/pull/138)
-- [Flower](https://github.com/adap/flower): In progress
+- [FL-Bench](https://github.com/KarhouTam/FL-bench)
+- [Flower](https://github.com/adap/flower): [Pull request under review](https://github.com/KarhouTam/FL-bench/pull/138)
 
 This repository is based on the FL-bench implementation and includes additional non-IID splits and utility functions used in the paper.
 
